@@ -15,6 +15,8 @@ from urllib.parse import urljoin
 
 MAIN_URL = 'https://www.sepe.es/HomeSepe/que-es-el-sepe/estadisticas/datos-avance/datos.html'
 
+DATA_ROOT = 'downloaded_files'
+
 req = requests.get(MAIN_URL)
 soup = BeautifulSoup(req.text, "html.parser")
 
@@ -28,17 +30,30 @@ if __name__ == "__main__":
         if (href.endswith('.xls')) | (href.endswith('.xlsx')) | (href.endswith('.csv')):
             document_links.append(href)
 
-    print('======================')
-    print(len(document_links))
+    # DOWNLOADING
+    counter = 0
+    for link in document_links:
+        complete_link = 'https://www.sepe.es/' + link
+        print('(' + str(counter) +  ') - ' + complete_link)
+        filename = complete_link.split('/')[-1]
+        filename = DATA_ROOT + '/' + filename
+        urlretrieve(complete_link, filename)
+        counter +=1
+
 
 
 """
 REFERENCES:
 ===========
 
-(1) 
-(2) 
-   
+(1) https://code.tutsplus.com/es/tutorials/scraping-webpages-in-python-with-beautiful-soup-the-basics--cms-28211
+(2) https://stackoverflow.com/questions/34632838/download-xls-files-from-a-webpage-using-python-and-beautifulsoup
+(3) https://docs.scrapy.org/en/latest/intro/overview.html
+(4) https://docs.scrapy.org/en/latest/
+(5) https://docs.scrapy.org/en/latest/intro/examples.html
+(6) https://github.com/scrapy/quotesbot
+(7) https://es.stackoverflow.com/questions/32165/qu%C3%A9-es-if-name-main/32185
+(8) https://www.atlassian.com/git/tutorials/saving-changes/gitignore#:~:text=If%20you%20want%20to%20ignore,directory%20as%20an%20ignored%20file.
 """
 
 
