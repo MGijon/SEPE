@@ -7,7 +7,6 @@ ENCARGARE EN LA SIGUIENTE ITERACION.
 
 import os
 import xlrd
-#import openpyxl
 import pandas as pd
 
 from auxiliar_parser_functions import *
@@ -15,48 +14,71 @@ from auxiliar_parser_functions import *
 available_files = os.listdir('downloaded_files')
 available_files = ['downloaded_files/' + file for file in available_files]
 
+def all_at_once_reading():
+    """
+    Dummy reading code.
+    :return:
+    """
+    print('==== Starting with Dummy Reading ====\n')
+    try:
+        print('\t# ------------------------ #')
+        print('\t# Dummy reading function 1 #')
+        print('\t# ------------------------ #')
+        dummy_reading(file=person_of_interest, name=person_of_interest[17:])
 
+        print('\n')
+        print('\t# ------------------------ #')
+        print('\t# Dummy reading function 2 #')
+        print('\t# ------------------------ #')
+        dummy_reading_2(file=person_of_interest, name=person_of_interest[17:])
+
+    except Exception as e:
+        print(e)
+
+    print('\n')
+    print('==== Ended with Dummy Reading ====')
+
+def shet_by_shet_reading():
+    """
+    Sheet by sheet reading.
+    :return:
+    """
+    print('==== Sheet by Sheet reading ====')
+    try:
+        document = xlrd.open_workbook(person_of_interest)
+        sheet_names = document.sheet_names()
+        print('- File: ' + person_of_interest)
+        print('\t* This file has a total of ' + str(len(sheet_names)) + ' sheets.')
+        print('\t* Sheet by sheet: ')
+        for i in range(len(sheet_names)):
+            print('\t(' + str(i) + ') > Sheet name: ' + sheet_names[i])
+            current_sheet = document.sheet_by_index(i)
+            print('\t\t. Number of rows: ' + str(current_sheet.nrows))
+            print('\t\t. Number of columns: ' + str(current_sheet.ncols))
+
+            # show_info_sheet(sheet= current_sheet, show_info=True)
+            # parse_sheet(file_name=person_of_interest[17:], sheet=current_sheet)
+
+        print('\n')
+    except Exception as e:
+        print(e)
+    print('==== Ended Sheet by Sheet reading ====')
 
 
 if __name__ == "__main__":
     # now, let's take just the first one of the files
-    sample = available_files
+    sample = available_files[:1]
     for person_of_interest in sample:
 
         # ============= #
         # DUMMY_READING #
         # ============= #
-        #print('==== Starting with Dummy Reading ====')
-        #try:
-        #    dummy_reading(file=person_of_interest, name=person_of_interest[17:])
-        #except Exception as e:
-        #    print(e)
-
-        #print('==== Ended with Dummy Reading ====')
+        all_at_once_reading()
 
         # ====================== #
         # SHEET_BY_SHEET_READING #
         # ====================== #
-        print('==== Sheet by Sheet reading ====')
-        try:
-            document = xlrd.open_workbook(person_of_interest)
-            sheet_names = document.sheet_names()
-            print('- File: '  + person_of_interest)
-            print('\t* This file has a total of ' + str(len(sheet_names)) + ' sheets.')
-            print('\t* Sheet by sheet: ')
-            for i in range(len(sheet_names)):
-                print('\t(' + str(i) + ') > Sheet name: ' + sheet_names[i])
-                current_sheet = document.sheet_by_index(i)
-                print('\t\t. Number of rows: ' + str(current_sheet.nrows))
-                print('\t\t. Number of columns: ' + str(current_sheet.ncols))
-
-                #show_info_sheet(sheet= current_sheet, show_info=True)
-                parse_sheet(file_name=person_of_interest[17:], sheet=current_sheet)
-
-            print('\n')
-        except Exception as e:
-            print(e)
-        print('==== Ended Sheet by Sheet reading ====')
+        #shet_by_shet_reading()
 
 
 

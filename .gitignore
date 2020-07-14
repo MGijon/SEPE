@@ -1,0 +1,10 @@
+Tests/venv
+Tests/downloaded_files
+Tests/intermediate_steps
+Tests/dummy
+Tests/dummy2
+*.xlsx
+*.csv
+*.xls
+*.xml
+
