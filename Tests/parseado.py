@@ -15,7 +15,9 @@ import pandas as pd
 from auxiliar_parser_functions import *
 
 available_files = os.listdir('downloaded_files')
-available_files = ['downloaded_files/' + file for file in available_files]
+#available_files = ['downloaded_files/' + file for file in available_files]    # uncomment to eat files directly as they are in the server
+available_files = ['intermediate_steps/' + file for file in available_files]
+
 
 def all_at_once_reading(show_selected_function_title=False):
     """
@@ -83,6 +85,7 @@ if __name__ == "__main__":
     with progressbar.ProgressBar(max_value=len(sample)) as bar:
 
         counter = 0
+        # person_of_interest -> single file
         for person_of_interest in sample:
 
             all_at_once_reading(show_selected_function_title=False)
@@ -120,6 +123,7 @@ REFERENCES:
 (7) https://robologs.net/2019/03/09/como-leer-ficheros-excel-con-python-y-xlrd/
 (8) https://pypi.org/project/xlwt/
 (9) https://www.sqlshack.com/python-scripts-to-format-data-in-microsoft-excel/
+(10) https://pypi.org/project/progressbar2/
 
 """
 

@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 import xlrd
 
+from process_data_frame import *
+
 def show_info_sheet(sheet, show_info):
     """
 	TODO: ahora mismo solo muestra info si show_info está activada, no tiene sentido que si esto es false se ejecute nada de esto, debo de arreglarlo para que tenga coherencia intera que le falta y mucho ahora mismo 
@@ -59,8 +61,8 @@ def dummy_reading(file, name):
 def dummy_reading_2(file, name):
     """
 
-    :param file:
-    :param name:
+    :param file: route to the Excel file without modifications
+    :param name: name of the file-
     :return:
     """
     # eliminando extension del archivo
@@ -88,11 +90,14 @@ def dummy_reading_2(file, name):
     for sheet in sheet_names:
         try:
             df = pd.read_excel(xls, sheet)
+
+            # Apply a pipeline designed to clean the data_frames :)
+            cleaned_df = cleaning_pipeline(df)
+
+            # Saving process
             try:
                 new_file_name = ROOT_DUMMY_2 + '/' + sheet + '.csv'
-                #print('New sheet name: ' + new_file_name)
-                df.to_csv(new_file_name)
-                #print(df.head(2))
+                cleaned_df.to_csv(new_file_name)
 
             except Exception as e:
                 print('The next exception has been raised during reading and saving the sheet.')

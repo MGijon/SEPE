@@ -13,7 +13,6 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen, urlretrieve, quote
 from urllib.parse import urljoin
 
-
 MAIN_URL = 'https://www.sepe.es/HomeSepe/que-es-el-sepe/estadisticas/datos-avance/datos.html'
 
 DATA_ROOT = 'downloaded_files'
