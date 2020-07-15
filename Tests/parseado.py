@@ -6,44 +6,49 @@ ENCARGARE EN LA SIGUIENTE ITERACION.
 """
 
 import os
+import time
+import progressbar
 import xlrd
 import pandas as pd
+
 
 from auxiliar_parser_functions import *
 
 available_files = os.listdir('downloaded_files')
 available_files = ['downloaded_files/' + file for file in available_files]
 
-def all_at_once_reading():
+def all_at_once_reading(show_selected_function_title=False):
     """
     Dummy reading code.
     :return:
     """
-    print('==== Starting with Dummy Reading ====\n')
-    try:
-        print('\t# ------------------------ #')
-        print('\t# Dummy reading function 1 #')
-        print('\t# ------------------------ #')
-        dummy_reading(file=person_of_interest, name=person_of_interest[17:])
 
-        print('\n')
-        print('\t# ------------------------ #')
-        print('\t# Dummy reading function 2 #')
-        print('\t# ------------------------ #')
+    try:
+        if show_selected_function_title:
+            print('\t# ------------------------ #')
+            print('\t# Dummy reading function 1 #')
+            print('\t# ------------------------ #')
+
+        #dummy_reading(file=person_of_interest, name=person_of_interest[17:])
+
+        if show_selected_function_title:
+            print('\n')
+            print('\t# ------------------------ #')
+            print('\t# Dummy reading function 2 #')
+            print('\t# ------------------------ #')
+
         dummy_reading_2(file=person_of_interest, name=person_of_interest[17:])
 
     except Exception as e:
         print(e)
 
-    print('\n')
-    print('==== Ended with Dummy Reading ====')
 
 def shet_by_shet_reading():
     """
     Sheet by sheet reading.
     :return:
     """
-    print('==== Sheet by Sheet reading ====')
+
     try:
         document = xlrd.open_workbook(person_of_interest)
         sheet_names = document.sheet_names()
@@ -62,24 +67,41 @@ def shet_by_shet_reading():
         print('\n')
     except Exception as e:
         print(e)
-    print('==== Ended Sheet by Sheet reading ====')
+
 
 
 if __name__ == "__main__":
+
     # now, let's take just the first one of the files
-    sample = available_files[:1]
-    for person_of_interest in sample:
+    sample = available_files
 
-        # ============= #
-        # DUMMY_READING #
-        # ============= #
-        all_at_once_reading()
+    # ============= #
+    # DUMMY_READING #
+    # ============= #
+    print('==== Starting with Dummy Reading ====\n')
 
-        # ====================== #
-        # SHEET_BY_SHEET_READING #
-        # ====================== #
+    with progressbar.ProgressBar(max_value=len(sample)) as bar:
+
+        counter = 0
+        for person_of_interest in sample:
+
+            all_at_once_reading(show_selected_function_title=False)
+
+            bar.update(counter)
+            counter +=1
+
+
+    print('==== Ended with Dummy Reading ====')
+
+    # ====================== #
+    # SHEET_BY_SHEET_READING #
+    # ====================== #
+    #print('==== Sheet by Sheet reading ====')
+    #for person_of_interest in sample:
+
         #shet_by_shet_reading()
 
+    #print('==== Ended Sheet by Sheet reading ====')
 
 
 
