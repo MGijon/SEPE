@@ -7,6 +7,7 @@ chardet==3.0.4
 constantly==15.1.0
 cryptography==2.9.2
 cssselect==1.1.0
+cycler==0.10.0
 et-xmlfile==1.0.1
 get==0.0.0
 html5lib==1.1
@@ -15,7 +16,9 @@ idna==2.10
 incremental==17.5.0
 itemadapter==0.1.0
 jdcal==1.4.1
+kiwisolver==1.2.0
 lxml==4.5.1
+matplotlib==3.2.2
 numpy==1.19.0
 openpyxl==3.0.4
 pandas==0.25.3
@@ -29,6 +32,7 @@ pycparser==2.20
 PyDispatcher==2.0.5
 PyHamcrest==2.0.2
 pyOpenSSL==19.1.0
+pyparsing==2.4.7
 python-dateutil==2.8.1
 python-utils==2.4.0
 pytz==2020.1

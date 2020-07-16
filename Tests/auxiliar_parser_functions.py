@@ -114,6 +114,9 @@ def dummy_reading_2(file, name):
 
 
 
+
+# TODO: I NO RECUERDO QUE DEMONIOS ERA ESTO!!!! NO TENGO NI IDEA DE LA LOGICA QUE DEBERIA HABER DETRAS
+
 def parse_sheet(file_name, sheet):
     """
     :param sheet:
