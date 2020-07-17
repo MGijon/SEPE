@@ -94,21 +94,36 @@ def extract_information(document, name, route_in):
                 # boolean cells
                 else:
                     boolean += 1
+        # empty
         single_file_struct['empty_cells'].append(empty)
-
         if single_file_struct['total_number_of_cells'][-1] != 0:
             single_file_struct['percent_empty_cells'].append(np.round((empty / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
         else: 
             single_file_struct['percent_empty_cells'].append(0)
-
+        # text
         single_file_struct['text_cells'].append(text)
-        single_file_struct['percent_text_cells'].append(np.round((text / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        if single_file_struct['total_number_of_cells'][-1] != 0:
+            single_file_struct['percent_text_cells'].append(np.round((text / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        else:
+            single_file_struct['percent_text_cells'].append(0)
+        # number
         single_file_struct['number_cells'].append(number)
-        single_file_struct['percent_number_cells'].append(np.round((number / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        if single_file_struct['total_number_of_cells'][-1] != 0:
+            single_file_struct['percent_number_cells'].append(np.round((number / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        else:
+            single_file_struct['percent_number_cells'].append(0)
+        # date
         single_file_struct['date_cells'].append(date)
-        single_file_struct['percent_date_cells'].append(np.round((date / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        if single_file_struct['total_number_of_cells'][-1] != 0:
+            single_file_struct['percent_date_cells'].append(np.round((date / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        else:
+            single_file_struct['percent_date_cells'].append(0)
+        # boolean
         single_file_struct['bool_cells'].append(boolean)
-        single_file_struct['percent_bool_cells'].append(np.round((boolean / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        if single_file_struct['total_number_of_cells'][-1] != 0:
+            single_file_struct['percent_bool_cells'].append(np.round((boolean / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        else:
+            single_file_struct['percent_bool_cells'].append(0)
 
 
     return single_file_struct
@@ -144,39 +159,80 @@ def analyce_information(list_data):
         counter = 1
 
         all_number_of_sheets = []
+        
+        bolquete_rows = []
+        collection_means_all_sheets = []    # ? TODO: decidir como analizar esto?!?!
+        collection_stds_all_sheets = []     # ? TODO: decidir como analizar esto?!?!
+
+        bolquete_cols = []
+        collection_means_all_sheets = []
+        collection_stds_all_sheets = []
             
         for single_file_data in list_data:
             # TOTAL_NUMBER_OF_SHEETS
             all_number_of_sheets.append(single_file_data['total_number_of_sheets'])
 
             # NUMBER_OF_ROWS
+            rows_single_file = 0
+            for rows_in_sheet in single_file_data['number_of_rows']:
+                bolquete_rows.append(rows_in_sheet)
+                rows_single_file += rows_in_sheet
+           
+            # NUMBER_OF_COLS   TODO: decidir como analizar esto?!?!
 
-            # NUMBER_OF_COLS
+            # TOTAL_NUMBER_OF_CELLS  TODO: decidir como analizar esto?!?!
 
-            # TOTAL_NUMBER_OF_CELLS
+            # EMPTY_CELLS  TODO: decidir como analizar esto?!?!
 
-            # EMPTY_CELLS
+            # TEXT_CELLS  TODO: decidir como analizar esto?!?!
 
-            # TEXT_CELLS
+            # MUMBER_CELLS  TODO: decidir como analizar esto?!?!
 
-            # MUMBER_CELLS
+            # DATE_CELLS  TODO: decidir como analizar esto?!?!
 
-            # DATE_CELLS
-
-            # BOOLS_CELLS
+            # BOOLS_CELLS  TODO: decidir como analizar esto?!?!
 
             bar.update(counter)
             counter += 1
 
-    # (2) OBTAINING INSIGHTS
+    # (2) OBTAINING INSIGHTS: BASIC ANALYSIS
     # ===
+    # (2.0)
+    print('· We have analyzed a total of ' + str(len(list_data)) + ' documents.')
+    # (2.1) Total_number_of_sheets
+    print('· Number of seets:')
+    print('\t· Max number of sheets: ' + str(max(all_number_of_sheets)))
+    print('\t· Min number of sheets: ' + str(min(all_number_of_sheets)))
+    print('\t· Mean: ' + str(np.mean(all_number_of_sheets)))
+    print('\t· Std: ' + str(np.std(all_number_of_sheets)))
+    # (2.2) Number_of_rows
+    print('· About the number of rows: ')
 
-    print('Mean: ' + str(np.mean(all_number_of_sheets)))
-    print('Std: ' + str(np.std(all_number_of_sheets)))
+    # (2.3) Number_of_columns
+    print('· About the number of columns: ')
+    
+    # (2.4) Total_number_of_cells
+    print('· About the total number of cells: ')
+
+    # (2.5) Number_of_empty_cells
+    print('· About the cells that are empty: ')
+
+    # (2.6) Number_of_text_cells
+    print('· About the cells that contains text: ')
+
+    # (2.7) Number_of_number_cells
+    print('· About the cells that contains numbers: ')
+
+    # (2.8) Number_of_date_cells
+    print('· About the cells that contains dates: ')
+
+    # (2.9) Number_of_bools_cells
+    print('· About the cells that contains boolean data: ')
+
 
 if __name__ == "__main__":
 
-    NUMBER_OF_DOCUMENTS = 5   # TODO: borrar cuando haya acabado el debugging.
+    NUMBER_OF_DOCUMENTS = 100   # TODO: borrar cuando haya acabado el debugging.
 
     list_documents = os.listdir(ROUTE_IN)
     list_documents = [ROUTE_IN + file for file in list_documents]
