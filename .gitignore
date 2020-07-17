@@ -3,6 +3,7 @@ Tests/downloaded_files
 Tests/intermediate_steps
 Tests/dummy
 Tests/dummy2
+Data_Analysis/images
 *.xlsx
 *.csv
 *.xls

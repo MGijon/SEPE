@@ -10,8 +10,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 
-ROUTE_IN = 'downloaded_files/'
-ROUTE_OUT = 'intermediate_steps/'
+ROUTE_IN = '../Tests/downloaded_files/'
 
 def show_dictionary_nicely(list_dictionaries):
     """
@@ -30,10 +29,7 @@ def show_dictionary_nicely(list_dictionaries):
 
         print('================================================================\n')
 
-
-
-
-def show_stats(document, name, route_in):
+def extract_information(document, name, route_in):
     """
     Show statistics about the document.
     :param document: route to an Excel file.
@@ -98,9 +94,13 @@ def show_stats(document, name, route_in):
                 # boolean cells
                 else:
                     boolean += 1
-
         single_file_struct['empty_cells'].append(empty)
-        single_file_struct['percent_empty_cells'].append(np.round((empty / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+
+        if single_file_struct['total_number_of_cells'][-1] != 0:
+            single_file_struct['percent_empty_cells'].append(np.round((empty / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
+        else: 
+            single_file_struct['percent_empty_cells'].append(0)
+
         single_file_struct['text_cells'].append(text)
         single_file_struct['percent_text_cells'].append(np.round((text / single_file_struct['total_number_of_cells'][-1]) * 100, 2))
         single_file_struct['number_cells'].append(number)
@@ -113,16 +113,77 @@ def show_stats(document, name, route_in):
 
     return single_file_struct
 
+def analyce_information(list_data):
+    """
 
+    :param list_data: list of Python dictionaries with the next key values:
+        - 'route_in': No useful now.
+        - 'name': No useful now.
+        - 'total_number_of_sheets': number of sheets per document.
+        - 'sheets_names': No useful now.
+        - 'number_of_rows': number of rows per sheet.
+        - 'number_of_cols': number of columns per sheet.
+        - 'total_number_of_cells': total number of cells in the sheet.
+        - 'empty_cells': total number of empty cells.
+        - 'text_cells': total number of cells that contains text.
+        - 'number_cells': total number of cells that contains numbers.
+        - 'date_cells': total numbers of cell that contains dates.
+        - 'bool_cells': total number of cells thtat contains booleans.
+        - 'percent_empty_cells': No useful now (because depends on some of the other ones).
+        - 'percent_text_cells': No useful now (because depends on some of the other ones).
+        - 'percent_number_cells': No useful now (because depends on some of the other ones).
+        - 'percent_date_cells': No useful now (because depends on some of the other ones).
+        - 'percent_bool_cells': No useful now (because depends on some of the other ones).
+
+    :return: 1 (to pass to the progressbar).
+    """
+    
+    # (1) EXTRACTING THE DATA 
+    # ===
+    with progressbar.ProgressBar(max_value=len(list_data)) as bar:
+        counter = 1
+
+        all_number_of_sheets = []
+            
+        for single_file_data in list_data:
+            # TOTAL_NUMBER_OF_SHEETS
+            all_number_of_sheets.append(single_file_data['total_number_of_sheets'])
+
+            # NUMBER_OF_ROWS
+
+            # NUMBER_OF_COLS
+
+            # TOTAL_NUMBER_OF_CELLS
+
+            # EMPTY_CELLS
+
+            # TEXT_CELLS
+
+            # MUMBER_CELLS
+
+            # DATE_CELLS
+
+            # BOOLS_CELLS
+
+            bar.update(counter)
+            counter += 1
+
+    # (2) OBTAINING INSIGHTS
+    # ===
+
+    print('Mean: ' + str(np.mean(all_number_of_sheets)))
+    print('Std: ' + str(np.std(all_number_of_sheets)))
 
 if __name__ == "__main__":
+
+    NUMBER_OF_DOCUMENTS = 5   # TODO: borrar cuando haya acabado el debugging.
 
     list_documents = os.listdir(ROUTE_IN)
     list_documents = [ROUTE_IN + file for file in list_documents]
 
-    sample = list_documents[:2]
+    sample = list_documents[:NUMBER_OF_DOCUMENTS]
 
-    print('PROCESS PART 1: OBTAINING THE DATA FROM THE FILES.')
+    print('PROCESS PART 1: OBTAINING THE DATA FROM THE FILES')
     # Here we save the information extracted from the excel files :)
     information_collection = []
     with progressbar.ProgressBar(max_value=len(sample)) as bar:
@@ -134,7 +195,7 @@ if __name__ == "__main__":
             try:
 
                 document = xlrd.open_workbook(excel_file)
-                information_collection.append(show_stats(document=document, name=excel_name, route_in=excel_file))
+                information_collection.append(extract_information(document=document, name=excel_name, route_in=excel_file))
                 #show_dictionary_nicely(list_dictionaries=information_collection)
             except Exception as e:
 
@@ -144,5 +205,7 @@ if __name__ == "__main__":
             bar.update(counter)
             counter += 1
 
-    #print(information_collection)
     print('PROCESS PART 2: EXTRACTING INSIGTHS FROM THE DATA')
+    analyce_information(list_data=information_collection)
+
+    
