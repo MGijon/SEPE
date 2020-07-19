@@ -128,9 +128,9 @@ def extract_information(document, name, route_in):
 
     return single_file_struct
 
-def analyce_information(list_data):
+def analyce_information(list_data, NUMBER_DECIMALS=2):
     """
-
+    Short statistical analysis.
     :param list_data: list of Python dictionaries with the next key values:
         - 'route_in': No useful now.
         - 'name': No useful now.
@@ -165,8 +165,16 @@ def analyce_information(list_data):
         collection_stds_all_sheets = []     # ? TODO: decidir como analizar esto?!?!
 
         bolquete_cols = []
-        collection_means_all_sheets = []
-        collection_stds_all_sheets = []
+        collection_means_all_sheets = []  # ? TODO: decidir como analizar esto?!?!
+        collection_stds_all_sheets = []   # ? TODO: decidir como analizar esto?!?!
+ 
+        bolquete_cells = []
+
+        bolquete_empty = []
+        bolquete_text = []
+        bolquete_number = [] 
+        bolquete_date = []
+        bolquete_bools = []
             
         for single_file_data in list_data:
             # TOTAL_NUMBER_OF_SHEETS
@@ -179,56 +187,119 @@ def analyce_information(list_data):
                 rows_single_file += rows_in_sheet
            
             # NUMBER_OF_COLS   TODO: decidir como analizar esto?!?!
+            cols_single_file = 0 # ??? TODO: LO ESTOY USANDO??? 
+            for cols_in_sheet in single_file_data['number_of_cols']:
+                bolquete_cols.append(cols_in_sheet)
+                cols_single_file += cols_in_sheet
 
             # TOTAL_NUMBER_OF_CELLS  TODO: decidir como analizar esto?!?!
+            for cells_in_sheet in single_file_data['total_number_of_cells']:
+                bolquete_cells.append(cells_in_sheet)
 
             # EMPTY_CELLS  TODO: decidir como analizar esto?!?!
+            for empty_in_sheet in single_file_data['empty_cells']:
+                bolquete_empty.append(empty_in_sheet)
 
             # TEXT_CELLS  TODO: decidir como analizar esto?!?!
+            for text_in_sheet in single_file_data['text_cells']:
+                bolquete_text.append(text_in_sheet)
 
             # MUMBER_CELLS  TODO: decidir como analizar esto?!?!
+            for number_in_sheet in single_file_data['number_cells']:
+                bolquete_number.append(number_in_sheet)
 
             # DATE_CELLS  TODO: decidir como analizar esto?!?!
+            for date_in_sheet in single_file_data['date_cells']:
+                bolquete_date.append(date_in_sheet)
 
             # BOOLS_CELLS  TODO: decidir como analizar esto?!?!
+            for bool_in_sheet in single_file_data['bool_cells']:
+                bolquete_bools.append(bool_in_sheet)
 
             bar.update(counter)
             counter += 1
 
     # (2) OBTAINING INSIGHTS: BASIC ANALYSIS
     # ===
+
+    print('\n#### #### #### ####\n')
     # (2.0)
-    print('· We have analyzed a total of ' + str(len(list_data)) + ' documents.')
+    print('\n· We have analyzed a total of ' + str(len(list_data)) + ' documents.')
+    
     # (2.1) Total_number_of_sheets
     print('· Number of seets:')
     print('\t· Max number of sheets: ' + str(max(all_number_of_sheets)))
     print('\t· Min number of sheets: ' + str(min(all_number_of_sheets)))
-    print('\t· Mean: ' + str(np.mean(all_number_of_sheets)))
-    print('\t· Std: ' + str(np.std(all_number_of_sheets)))
+    auxiliar_0 = np.mean(all_number_of_sheets)
+    print('\t· Mean: ' + str(np.round(auxiliar_0, NUMBER_DECIMALS)))
+    auxiliar_1 = np.std(all_number_of_sheets)
+    print('\t· Std: ' + str(np.round(auxiliar_1, NUMBER_DECIMALS)))
+    
     # (2.2) Number_of_rows
     print('· About the number of rows: ')
+    print('\t· Total number of rows in all documents: ' + str(sum(bolquete_rows)))
+    auxiliar_2 = np.mean(single_file_data['number_of_rows'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_2, NUMBER_DECIMALS)))
+    auxiliar_3 = np.std(single_file_data['number_of_cols'])
+    print('\t· The std is: ' + str(np.round(auxiliar_3, NUMBER_DECIMALS)))
 
     # (2.3) Number_of_columns
     print('· About the number of columns: ')
-    
+    print('\t· Total number of columns in all documents: ' + str(sum(bolquete_rows)))
+    auxiliar_4 = np.mean(single_file_data['number_of_cols'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_4, NUMBER_DECIMALS)))
+    auxiliar_5 = np.std(single_file_data['number_of_cols'])
+    print('\t· The std is: ' + str(np.round(auxiliar_5, NUMBER_DECIMALS)))
+
     # (2.4) Total_number_of_cells
     print('· About the total number of cells: ')
+    print('\t· Total number of cells in all documents: ' + str(sum(bolquete_cells)))
+    auxiliar_6 = np.mean(single_file_data['total_number_of_cells'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_6, NUMBER_DECIMALS)))
+    auxiliar_7 = np.std(single_file_data['total_number_of_cells'])
+    print('\t· The std is: ' + str(np.round(auxiliar_7, NUMBER_DECIMALS)))
 
     # (2.5) Number_of_empty_cells
     print('· About the cells that are empty: ')
+    print('\t· Total number of empty cells: ' + str(sum(bolquete_empty)))
+    auxiliar_8 = np.mean(single_file_data['empty_cells'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_8, NUMBER_DECIMALS)))
+    auxiliar_9 = np.std(single_file_data['empty_cells'])
+    print('\t· The std is: ' + str(np.round(auxiliar_9, NUMBER_DECIMALS)))
 
     # (2.6) Number_of_text_cells
     print('· About the cells that contains text: ')
+    print('\t· Total number of text cells: ' + str(sum(bolquete_text)))
+    auxiliar_10 = np.mean(single_file_data['text_cells'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_10, NUMBER_DECIMALS)))
+    auxiliar_11 = np.std(single_file_data['text_cells'])
+    print('\t· The std is: ' + str(np.round(auxiliar_11, NUMBER_DECIMALS)))
 
     # (2.7) Number_of_number_cells
     print('· About the cells that contains numbers: ')
+    print('\t· Total number of number cells: ' + str(sum(bolquete_number)))
+    auxiliar_12 = np.mean(single_file_data['number_cells'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_12, NUMBER_DECIMALS)))
+    auxiliar_13 = np.std(single_file_data['number_cells'])
+    print('\t· The std is: ' + str(np.round(auxiliar_13, NUMBER_DECIMALS)))
 
     # (2.8) Number_of_date_cells
     print('· About the cells that contains dates: ')
+    print('\t· Total number of date cells: ' + str(sum(bolquete_date)))
+    auxiliar_14 = np.mean(single_file_data['date_cells'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_14, NUMBER_DECIMALS)))
+    auxiliar_15 = np.std(single_file_data['date_cells'])
+    print('\t· The std is: ' + str(np.round(auxiliar_15, NUMBER_DECIMALS)))
 
     # (2.9) Number_of_bools_cells
     print('· About the cells that contains boolean data: ')
+    print('\t· Total number of boolean cells: ' + str(sum(bolquete_bools)))
+    auxiliar_16 = np.mean(single_file_data['bool_cells'])
+    print('\t· The mean is: ' + str(np.round(auxiliar_16, NUMBER_DECIMALS)))
+    auxiliar_17 = np.std(single_file_data['bool_cells'])
+    print('\t· The std is: ' + str(np.round(auxiliar_17, NUMBER_DECIMALS)))
 
+    print('#### #### #### ####\n')
 
 if __name__ == "__main__":
 
@@ -239,7 +310,9 @@ if __name__ == "__main__":
 
     sample = list_documents[:NUMBER_OF_DOCUMENTS]
 
-    print('PROCESS PART 1: OBTAINING THE DATA FROM THE FILES')
+    print('\n# ================================================= #')
+    print('# PROCESS PART 1: OBTAINING THE DATA FROM THE FILES #')
+    print('# ================================================= #\n')
     # Here we save the information extracted from the excel files :)
     information_collection = []
     with progressbar.ProgressBar(max_value=len(sample)) as bar:
@@ -261,7 +334,9 @@ if __name__ == "__main__":
             bar.update(counter)
             counter += 1
 
-    print('PROCESS PART 2: EXTRACTING INSIGTHS FROM THE DATA')
+    print('\n# ================================================= #')
+    print('# PROCESS PART 2: EXTRACTING INSIGTHS FROM THE DATA #')
+    print('# ================================================= #\n')
     analyce_information(list_data=information_collection)
 
     
