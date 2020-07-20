@@ -212,14 +212,6 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
     
     # (2.2) Number_of_rows
     # =====
-    '''
-    print('· About the number of rows: ')
-    print('\t· Total number of rows in all documents: ' + str(sum(bolquete_rows)))
-    auxiliar_2 = np.mean(single_file_data['number_of_rows'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_2, NUMBER_DECIMALS)))
-    auxiliar_3 = np.std(single_file_data['number_of_cols'])
-    print('\t· The std is: ' + str(np.round(auxiliar_3, NUMBER_DECIMALS))
-    ''' 
     plt.figure()
     plt.title('Number of rows (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_rows, bins=NUMBER_BINS)
@@ -228,14 +220,6 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
 
     # (2.3) Number_of_columns
     # =====
-    '''
-    print('· About the number of columns: ')
-    print('\t· Total number of columns in all documents: ' + str(sum(bolquete_rows)))
-    auxiliar_4 = np.mean(single_file_data['number_of_cols'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_4, NUMBER_DECIMALS)))
-    auxiliar_5 = np.std(single_file_data['number_of_cols'])
-    print('\t· The std is: ' + str(np.round(auxiliar_5, NUMBER_DECIMALS)))
-    '''
     plt.figure()
     plt.title('Number of columns  (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_cols, bins=NUMBER_BINS)
@@ -244,14 +228,6 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
 
     # (2.4) Total_number_of_cells
     # =====
-    '''
-    print('· About the total number of cells: ')
-    print('\t· Total number of cells in all documents: ' + str(sum(bolquete_cells)))
-    auxiliar_6 = np.mean(single_file_data['total_number_of_cells'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_6, NUMBER_DECIMALS)))
-    auxiliar_7 = np.std(single_file_data['total_number_of_cells'])
-    print('\t· The std is: ' + str(np.round(auxiliar_7, NUMBER_DECIMALS)))
-    '''
     plt.figure()
     plt.title('Number of cells  (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_cells, bins=NUMBER_BINS)
@@ -260,14 +236,6 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
 
     # (2.5) Number_of_empty_cells
     # =====
-    '''
-    print('· About the cells that are empty: ')
-    print('\t· Total number of empty cells: ' + str(sum(bolquete_empty)))
-    auxiliar_8 = np.mean(single_file_data['empty_cells'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_8, NUMBER_DECIMALS)))
-    auxiliar_9 = np.std(single_file_data['empty_cells'])
-    print('\t· The std is: ' + str(np.round(auxiliar_9, NUMBER_DECIMALS)))
-    '''
     plt.figure()
     plt.title('Number of empty cells (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_empty, bins=NUMBER_BINS)
@@ -276,14 +244,6 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
 
     # (2.6) Number_of_text_cells
     # =====
-    '''
-    print('· About the cells that contains text: ')
-    print('\t· Total number of text cells: ' + str(sum(bolquete_text)))
-    auxiliar_10 = np.mean(single_file_data['text_cells'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_10, NUMBER_DECIMALS)))
-    auxiliar_11 = np.std(single_file_data['text_cells'])
-    print('\t· The std is: ' + str(np.round(auxiliar_11, NUMBER_DECIMALS)))
-    '''
     plt.figure()
     plt.title('Cells that contains text  (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_text, bins=NUMBER_BINS)
@@ -292,14 +252,6 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
 
     # (2.7) Number_of_number_cells
     # =====
-    '''
-    print('· About the cells that contains numbers: ')
-    print('\t· Total number of number cells: ' + str(sum(bolquete_number)))
-    auxiliar_12 = np.mean(single_file_data['number_cells'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_12, NUMBER_DECIMALS)))
-    auxiliar_13 = np.std(single_file_data['number_cells'])
-    print('\t· The std is: ' + str(np.round(auxiliar_13, NUMBER_DECIMALS)))
-    '''
     plt.figure()
     plt.title('Cells that contains numbers  (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_number, bins=NUMBER_BINS)
@@ -308,14 +260,6 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
 
     # (2.8) Number_of_date_cells
     # =====
-    '''
-    print('· About the cells that contains dates: ')
-    print('\t· Total number of date cells: ' + str(sum(bolquete_date)))
-    auxiliar_14 = np.mean(single_file_data['date_cells'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_14, NUMBER_DECIMALS)))
-    auxiliar_15 = np.std(single_file_data['date_cells'])
-    print('\t· The std is: ' + str(np.round(auxiliar_15, NUMBER_DECIMALS)))
-    '''
     plt.figure()
     plt.title('Cells that contains dates  (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_date, bins=NUMBER_BINS)
@@ -324,20 +268,8 @@ def basic_analysis(list_data, NUMBER_DECIMALS=2):
 
     # (2.9) Number_of_bools_cells
     # =====
-    '''
-    print('· About the cells that contains boolean data: ')
-    print('\t· Total number of boolean cells: ' + str(sum(bolquete_bools)))
-    auxiliar_16 = np.mean(single_file_data['bool_cells'])
-    print('\t· The mean is: ' + str(np.round(auxiliar_16, NUMBER_DECIMALS)))
-    auxiliar_17 = np.std(single_file_data['bool_cells'])
-    print('\t· The std is: ' + str(np.round(auxiliar_17, NUMBER_DECIMALS)))
-    '''
     plt.figure()
     plt.title('Cells that contains booleans  (total of ' + str(len(list_data)) + ' documents analyzed)')
     plt.hist(bolquete_bools, bins=NUMBER_BINS)
     plt.xlabel('MEAN: ' + str(np.mean(bolquete_bools)) + ' - STD: ' + str(np.std(bolquete_bools)))
     plt.savefig(ROUTE_IMAGES + 'number_of_bools_cells_per_document_(all_sheets_at_once).png')
-
-
-
-    
