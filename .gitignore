@@ -4,8 +4,8 @@ Tests/intermediate_steps
 Tests/dummy
 Tests/dummy2
 Data_Analysis/images
+Cleaner/out_files/
 *.xlsx
 *.csv
 *.xls
 *.xml
-
