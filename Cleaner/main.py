@@ -16,7 +16,7 @@ ROUTE_OUT = 'out_files/'
 
 if __name__ == '__main__':
 
-    NUMBER_OF_DOCUMENTS = 10 # if < 0 -> take all documents
+    NUMBER_OF_DOCUMENTS = 2 # if < 0 -> take all documents
 
     list_documents = os.listdir(ROUTE_IN)
     list_documents = [ROUTE_IN + file for file in list_documents]
@@ -33,7 +33,7 @@ if __name__ == '__main__':
         counter = 1
         for excel_file in sample:
             excel_name = excel_file.replace(ROUTE_IN, '')
-            excel_file = excel_name.replace('.csv', '').replace('.xls', '').replace('xlsx', '')
+            excel_name = excel_name.replace('.csv', '').replace('.xls', '').replace('xlsx', '')
 
             try:
 
@@ -48,3 +48,13 @@ if __name__ == '__main__':
 
 
             counter += 1
+
+
+"""
+REFERENCES:
+===========
+
+(1) https://xlrd.readthedocs.io/en/latest/vulnerabilities.html
+(2) https://pypi.org/project/XlsxWriter/
+(3) https://xlsxwriter.readthedocs.io/
+"""
