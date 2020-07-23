@@ -5,6 +5,7 @@ Tests/dummy
 Tests/dummy2
 Data_Analysis/images
 Cleaner/out_files/
+Cleaner/out_files/heatmaps
 *.xlsx
 *.csv
 *.xls

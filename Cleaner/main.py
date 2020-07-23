@@ -16,7 +16,7 @@ ROUTE_OUT = 'out_files/'
 
 if __name__ == '__main__':
 
-    NUMBER_OF_DOCUMENTS = 2 # if < 0 -> take all documents
+    NUMBER_OF_DOCUMENTS = -1 # if < 0 -> take all documents
 
     list_documents = os.listdir(ROUTE_IN)
     list_documents = [ROUTE_IN + file for file in list_documents]
