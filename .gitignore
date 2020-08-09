@@ -1,11 +1,16 @@
+.DS_Store
+Tests/.DS_Store
 Tests/.venv
 Tests/downloaded_files
 Tests/intermediate_steps
 Tests/dummy
 Tests/dummy2
+Data_Analysis/.DS_Store
 Data_Analysis/images
+Cleaner/.DS_Store
 Cleaner/out_files/
 Cleaner/out_files/heatmaps
+Cleaner/out_files/intermediate_steps
 *.xlsx
 *.csv
 *.xls

@@ -28,6 +28,8 @@ if __name__ == '__main__':
         sample = list_documents[:NUMBER_OF_DOCUMENTS]
 
     print('# PROCESS PART 1: ')
+    '''
+    try: 
     with progressbar.ProgressBar(max_value=len(sample)) as bar:
 
         counter = 1
@@ -48,7 +50,8 @@ if __name__ == '__main__':
 
 
             counter += 1
-
+    '''
+    
 
 """
 REFERENCES:
