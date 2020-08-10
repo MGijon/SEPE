@@ -25,12 +25,16 @@ import matplotlib.pyplot as plt
 SHOW_DEBUGGING = False #
 ROUTE_HEATMAPS = 'out_files/heatmaps/'
 
-def looking_for_groups(sheet, sheet_name, excel_file_name, route_save_images=ROUTE_HEATMAPS):
+def looking_for_groups(sheet, sheet_name, excel_file_name, plot_heatmap=False, save=False, route_save_images=ROUTE_HEATMAPS):
     """
-    TODO: PRECISE THIS PROCESS
+    We look for data groups in the specified sheet creating heatmaps and returning a 2-Dimensional array with the infarmation 
+    of what kinf of info is in every sheet.
     :param sheet: excel sheet.
     :param sheet_name: name of the sheet.
     :param excel_file_name: name of the excel file.
+    :param plot_heatmap: if True show the heatmaps.
+    :param save: if True save the images in the precised route.
+    :param route_save_images: route where the images are gonna be saved.
     :return: None.
 
     NOTES:
@@ -61,8 +65,10 @@ def looking_for_groups(sheet, sheet_name, excel_file_name, route_save_images=ROU
     plt.figure()
     H = np.asanyarray(posible_information)
     plt.imshow(H)
-    plt.savefig(route_save_images + sheet_name + '.png')
+    if save:
+        plt.savefig(route_save_images + sheet_name + '.png')
 
+    return posible_information
 
 def erasing_empty_columns_rows(sheet, sheet_name, excel_file_name):
     """
@@ -86,8 +92,6 @@ def erasing_empty_columns_rows(sheet, sheet_name, excel_file_name):
 
 
     return 0
-
-
 
 
 def main_cleaner(file, name, heatmaps=False):
@@ -118,3 +122,20 @@ def main_cleaner(file, name, heatmaps=False):
             #
             looking_for_groups(sheet=current_sheet, sheet_name=sheet_name, excel_file_name = name)
 
+   # Ahora aquí debo de hacer las llamadas oportunas
+
+
+"""
+BAD_CODE:
+=========
+
+
+"""
+
+
+"""
+REFERENCES:
+===========
+
+
+"""

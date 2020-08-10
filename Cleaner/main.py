@@ -27,31 +27,55 @@ if __name__ == '__main__':
     else:
         sample = list_documents[:NUMBER_OF_DOCUMENTS]
 
-    print('# PROCESS PART 1: ')
+    print('# ============== #')
+    print('# PROCESS PART 1 #')
+    print('# ============== #')
+
+    '''
+    # NO PROGRESSBAR version
+    for excel_file in sample:
+        try:
+            excel_name = excel_file.replace('ROUTE_IN', '')
+            excel_name = excel_name.replace('.csv', '').replace('.xls', '').replace('.xlsx', '')
+
+            # wont add another try/except becouse until this point there is no reason to fail
+            main_cleaner(file=excel_file, 
+                         name=excel_name)
+
+        except Exception as e:
+            print(e)
+            pass 
+
     '''
     try: 
-    with progressbar.ProgressBar(max_value=len(sample)) as bar:
+        with progressbar.ProgressBar(max_value=len(sample)) as bar:
 
-        counter = 1
-        for excel_file in sample:
-            excel_name = excel_file.replace(ROUTE_IN, '')
-            excel_name = excel_name.replace('.csv', '').replace('.xls', '').replace('xlsx', '')
+            counter = 1
+            for excel_file in sample:
+                excel_name = excel_file.replace(ROUTE_IN, '')
+                excel_name = excel_name.replace('.csv', '').replace('.xls', '').replace('.xlsx', '')
 
-            try:
+                try:
 
-                main_cleaner(file=excel_file, name=excel_name)
-                bar.update(counter)
-
-
-            except Exception as e:
-                print('Something has happend during processing the file... sorry bro! :(')
-                print(e)
-                bar.update(counter)
+                    main_cleaner(file=excel_file, name=excel_name)
+                    bar.update(counter)
 
 
-            counter += 1
-    '''
+                except Exception as e:
+                    print('Something has happend during processing the file... sorry bro! :(')
+                    print(e)
+                    bar.update(counter)
+
+
+                counter += 1
     
+    except:
+        pass 
+    
+    print('# ============== #')
+    print('# PROCESS PART 2 #')
+    print('# ============== #')
+
 
 """
 REFERENCES:
