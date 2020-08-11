@@ -106,7 +106,7 @@ def main_cleaner(file, name, heatmaps=False):
     # separate it in sheets
     sheet_names = document.sheet_names()
 
-    # Create heatmaps based on the content in the sheets
+    # Create heatmaps based on the content in the sheets: TODO ELIMINAR LOS BUCLES IF/ELSE, NO HACE FALTA YA QUE SE PASA POR PARÁMETRO!!
     if heatmaps:
         # si no existe la carpeta con el nomrbe la creamos
         lista_carpetas = os.listdir('out_files/heatmaps/')
@@ -120,8 +120,25 @@ def main_cleaner(file, name, heatmaps=False):
             #
             sheet_name = sheet_names[i]
             #
-            looking_for_groups(sheet=current_sheet, sheet_name=sheet_name, excel_file_name = name)
+            looking_for_groups(sheet=current_sheet, 
+                               sheet_name=sheet_name, 
+                               excel_file_name = name,
+                               plot_heatmap=True,
+                               save=True)
+    else:
+        
+        for i in range(len(sheet_names)):
+            current_sheet = document.sheet_by_index(i)
+            sheet_name = sheet_names[i]
 
+            information = looking_for_groups(sheet=current_sheet,
+                                            sheet_name=sheet_name, 
+                                            excel_file_name=name, 
+                                            plot_heatmap=False, 
+                                            save=False)
+
+        for line in information:
+            print(line)
    # Ahora aquí debo de hacer las llamadas oportunas
 
 

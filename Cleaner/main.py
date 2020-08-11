@@ -12,11 +12,11 @@ from cleaner_functions import main_cleaner
 
 ROUTE_IN = '../Tests/downloaded_files/'
 ROUTE_OUT = 'out_files/'
+NUMBER_OF_DOCUMENTS = 2 # if < 0 -> take all documents
 
 
 if __name__ == '__main__':
 
-    NUMBER_OF_DOCUMENTS = -1 # if < 0 -> take all documents
 
     list_documents = os.listdir(ROUTE_IN)
     list_documents = [ROUTE_IN + file for file in list_documents]
