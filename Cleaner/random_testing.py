@@ -47,6 +47,109 @@ if __name__ == '__main__':
 
             print(' ----> ', sheet_names[i])
 
+            information = []
+
+            for row in range(number_rows):
+                for col in range(number_cols):
+                    data = sheet.cell_value(row, col)
+                    content = sheet.cell_type(row, col)
+                    information.append({
+                        'row': row,
+                        'col': col,
+                        'data': data,
+                        'content': content,
+                    })
+
+            # ROWS
+            # ahora limpiamos todo lo que podamos la información eliminando filas enteras si hace falta
+            candidate_rows = []
+            #candidate_cols = []
+            for element in information:
+                if element['content'] == 0:
+                    candidate_rows.append(element['row'])
+                    #candidate_cols.append(element['col'])
+
+            candidate_rows = list(set(candidate_rows))
+            #candidate_cols = list(set(candidate_cols))
+            
+            to_erase_rows = []
+
+            for row in candidate_rows:
+                all_columns = 0
+                for element in information:
+                    for j in range(number_cols):
+                        if (element['row'] == row) and (element['col'] == j) and (element['content'] == 0):
+                            all_columns += 1
+                if all_columns == number_cols:
+                    #print('Eliminar fila ', str(row))
+                    to_erase_rows.append(row)
+
+            for element in information:
+                for row in to_erase_rows:
+                    if element['row'] == row:
+                        index = information.index(element)
+                        del information[index]
+
+
+            # COLS 
+            candidate_cols = []
+            for element in information:
+                if element['content'] == 0:
+                    candidate_rows.append(element['col'])
+#
+            candidate_cols = list(set(candidate_cols))
+            to_erase_cols = []
+
+            for col in candidate_cols:
+                all_rows = 0
+                for element in information:
+                    for j in range(number_cols):
+                        if (element['col'] == col) and (element['row'] == j) and (element['content'] == 0):
+                            all_rows +=1
+                if all_rows == number_cols:
+                    to_erase_cols.append(col) 
+
+            
+            for element in information:
+                for col in to_erase_cols:
+                    if element['col'] == col:
+                        index = information.index(element)
+                        del information[index]
+
+
+            ## VAMOS A VISUALIZAR EL RESULTADO, 
+            #datos_array = [[] for x in len(information)]
+            #for element in information:
+            
+            new_max_rows = number_rows
+            new_max_cols = number_cols
+            
+            new_indexes_rows = []
+            new_indexes_cols = []
+
+            for element in information:
+                new_indexes_rows.append(element['row'])
+                new_indexes_cols.append(element['col'])
+
+            new_indexes_rows = list(set(new_indexes_rows))
+            new_indexes_cols = list(set(new_indexes_cols))
+            
+            new_number_rows = len(new_indexes_rows)
+            new_number_cols = len(new_indexes_cols)
+
+            print(min(new_indexes_rows), ' - ', max(new_indexes_rows))
+            print(min(new_indexes_cols), ' - ', max(new_indexes_cols))
+
+            print('Old number of rows ' + str(number_rows) + ' - New number of rows ' + str(new_number_rows))
+            print('Old number of rows ' + str(number_cols) + ' - New number of cols ' + str(new_number_cols))
+
+            '''
+            if element['row'] = row: # nos quedamos en la fila candidata, se trata ahora de comprobar si todas las columnas están vacías
+                for col in range(number_cols):
+                    for element2 in information:
+                        if element[]
+            '''
+            '''
             # Read sheet
             posible_information = []
             map_posible_information = []
@@ -65,9 +168,19 @@ if __name__ == '__main__':
             # Repasamos el mapeo buscando mierda varia, para empezar columnas vacías
             non_empty_columsn = []
 
+            for row in map_posible_information:
+                if sum(row) != 0:
+                    non_empty_columsn.append(row)
             
             for line in posible_information:
                 print(line)
+            print('NON EMPTY COLUMNS: ', non_empty_columsn)
+            '''
+
+
+
+
+
             #print(pd.DataFrame(posible_information))
             #print('\n ............. \n')
 
