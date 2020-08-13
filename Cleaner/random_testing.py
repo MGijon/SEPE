@@ -22,6 +22,10 @@ NUMBER_OF_DOCUMENTS = 2 # if < 0 -> take all documents
 
 if __name__ == '__main__':
 
+    ######################
+    #### DATA_READING ####
+    ######################
+
     list_documents = os.listdir(ROUTE_IN)
     list_documents = [ROUTE_IN + file for file in list_documents]
 
@@ -40,12 +44,16 @@ if __name__ == '__main__':
 
         for i in range(len(sheet_names)):
             
+            print(' ----> ', sheet_names[i])
+
+
             sheet = document.sheet_by_index(i)
+            
             number_rows = sheet.nrows
             number_cols = sheet.ncols
 
-
-            print(' ----> ', sheet_names[i])
+            print('Original number of rows: ', number_rows)
+            print('Original number of cols: ', number_cols)
 
             information = []
 
@@ -60,20 +68,83 @@ if __name__ == '__main__':
                         'content': content,
                     })
 
-            # ROWS
-            # ahora limpiamos todo lo que podamos la información eliminando filas enteras si hace falta
+
+            ##########################
+            #### CLEANING_PROCESS ####
+            ##########################
+            
+            # (1) Erasing empty rows and columns
+            # ===
+
+            # Dont think this part is necessary: we can take all columns as candidates∫
+            '''
             candidate_rows = []
-            #candidate_cols = []
+            candidate_cols = []
+
             for element in information:
                 if element['content'] == 0:
                     candidate_rows.append(element['row'])
-                    #candidate_cols.append(element['col'])
+                    candidate_cols.append(element['col'])
+                    
+            candidate_rows = list(set(candidate_rows))   
+            candidate_cols = list(set(candidate_cols))
 
-            candidate_rows = list(set(candidate_rows))
-            #candidate_cols = list(set(candidate_cols))
-            
             to_erase_rows = []
+            to_erase_cols = []
+            '''
+            candidate_rows, candidate_cols = [i for i in range(number_rows)], [i for i in range(number_cols)]
+            #to_erase_rows, to_erase_cols = [], []
+            
+            for row_index in candidate_rows:
+                all_empty = number_cols
+                for col_index in candidate_cols:
+                    for element in information:
+                        if (element['row']==row_index) and (element['col']==col_index):
+                            # we are in the correct place
+                            if element['content'] == 0:
+                                all_empty -= 1
+                if all_empty==0:
+                    index = candidate_rows.index(row_index)
+                    del candidate_rows[index]
 
+            for col_index in candidate_rows:
+                all_empty = number_rows
+                for row_index in candidate_rows:
+                    for element in information:
+                        if (element['row']==row_index) and (element['col']==col_index):
+                            # We are in the correct place
+                            if element['content'] == 0:
+                                all_empty -= 1
+                if all_empty==0:
+                    index = candidate_cols.index(col_index)
+                    del candidate_rows[index]
+
+            print('Number of non-empty rows: ', len(candidate_rows))
+            print('Number of non-empty columns: ', len(candidate_cols))
+
+
+            ############################
+            #### DATA_VISUALIZATION ####
+            ############################
+
+            structured_information = []
+            for row_index in candidate_cols:
+                auxiliar_vector_content = []
+                auxiliar_vector_data = []
+                for element in information:
+                    if (element['row']==row_index):
+                        auxiliar_vector_content.append(element['content'])
+                        auxiliar_vector_data.append(element['data'])
+
+
+                structured_information.append(auxiliar_vector_data)
+                #print(auxiliar_vector_content)
+                #print('....')
+                #print(auxiliar_vector_data)
+            print(pd.DataFrame(structured_information))
+
+
+            '''
             for row in candidate_rows:
                 all_columns = 0
                 for element in information:
@@ -89,17 +160,17 @@ if __name__ == '__main__':
                     if element['row'] == row:
                         index = information.index(element)
                         del information[index]
-
+            '''
 
             # COLS 
-            candidate_cols = []
-            for element in information:
-                if element['content'] == 0:
-                    candidate_rows.append(element['col'])
-#
-            candidate_cols = list(set(candidate_cols))
-            to_erase_cols = []
+            #candidate_cols = []
+            #for element in information:
+            #    if element['content'] == 0:
+                    
 
+            #candidate_cols = list(set(candidate_cols))
+            #to_erase_cols = []
+            '''
             for col in candidate_cols:
                 all_rows = 0
                 for element in information:
@@ -115,12 +186,15 @@ if __name__ == '__main__':
                     if element['col'] == col:
                         index = information.index(element)
                         del information[index]
-
+            
 
             ## VAMOS A VISUALIZAR EL RESULTADO, 
             #datos_array = [[] for x in len(information)]
             #for element in information:
-            
+            '''
+
+
+            '''
             new_max_rows = number_rows
             new_max_cols = number_cols
             
@@ -136,12 +210,12 @@ if __name__ == '__main__':
             
             new_number_rows = len(new_indexes_rows)
             new_number_cols = len(new_indexes_cols)
+            '''
+            #print(min(new_indexes_rows), ' - ', max(new_indexes_rows))
+            #print(min(new_indexes_cols), ' - ', max(new_indexes_cols))
 
-            print(min(new_indexes_rows), ' - ', max(new_indexes_rows))
-            print(min(new_indexes_cols), ' - ', max(new_indexes_cols))
-
-            print('Old number of rows ' + str(number_rows) + ' - New number of rows ' + str(new_number_rows))
-            print('Old number of rows ' + str(number_cols) + ' - New number of cols ' + str(new_number_cols))
+            #print('Old number of rows ' + str(number_rows) + ' - New number of rows ' + str(new_number_rows))
+            #print('Old number of rows ' + str(number_cols) + ' - New number of cols ' + str(new_number_cols))
 
             '''
             if element['row'] = row: # nos quedamos en la fila candidata, se trata ahora de comprobar si todas las columnas están vacías
