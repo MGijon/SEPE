@@ -17,7 +17,7 @@ import pandas as pd
 ROUTE_IN = '../Tests/downloaded_files/'
 ROUTE_OUT = 'out_files/'
 NUMBER_OF_DOCUMENTS = 2 # if < 0 -> take all documents
-
+SHOW_ALL_SHIT = False   # for showing all kind of messages
 
 if __name__ == '__main__':
 
@@ -50,8 +50,9 @@ if __name__ == '__main__':
             number_rows = sheet.nrows
             number_cols = sheet.ncols
 
-            print('Original number of rows: ', number_rows)
-            print('Original number of cols: ', number_cols)
+            if SHOW_ALL_SHIT:
+                print('Original number of rows: ', number_rows)
+                print('Original number of cols: ', number_cols)
 
             information = []
 
@@ -71,8 +72,6 @@ if __name__ == '__main__':
             #### CLEANING_PROCESS ####
             ##########################
             
-            candidate_rows, candidate_cols = [i for i in range(number_rows)], [i for i in range(number_cols)]
-
             '''
             # (1) Detecting titles: TODO AÑADIR DENTRO DE UNO DE LOS OTROS BUCLES POR COSTO COMPUTACIONAL
             # ===
@@ -102,13 +101,14 @@ if __name__ == '__main__':
                 print(sheet_title)
                 print('****')
                ''' 
+            
+            candidate_rows = [x for x in range(number_rows)]
+            candidate_cols = [c for c in range(number_cols)]
 
-
-            # (1) Erasing empty rows and columns
-            # ===       
-
-            def part_1():
+            def part_1(candidate_rows, candidate_cols):
                 """
+                :param candidate_rows:
+                :param candidate_cols:
                 """
                 for row_index in candidate_rows:
                     all_empty = number_cols
@@ -121,6 +121,9 @@ if __name__ == '__main__':
                     if all_empty==0:
                         index = candidate_rows.index(row_index)
                         del candidate_rows[index]
+                
+                if SHOW_ALL_SHIT:
+                    print('Total rows after cleaning: ', len(candidate_rows))
 
                 for col_index in candidate_rows:
                     all_empty = number_rows
@@ -133,20 +136,31 @@ if __name__ == '__main__':
                     if all_empty==0:
                         index = candidate_cols.index(col_index)
                         del candidate_cols[index]
+                
+                if SHOW_ALL_SHIT:
+                    print('Total cols after cleaning: ', len(candidate_cols))
+                return [candidate_rows, candidate_rows]
             
-            part_1()
+            both = part_1(candidate_rows=candidate_rows, 
+                          candidate_cols=candidate_cols)
+            
+            if SHOW_ALL_SHIT:
+                print(set(both[1]) - set([x for x in range(number_cols)]))
+                print(set(both[0]) - set([x for x in range(number_rows)]))
 
-            print('Number of non-empty rows: ', len(candidate_rows))
-            print('Number of non-empty columns: ', len(candidate_cols))
+                print('Number of non-empty rows: ', len(candidate_rows))
+                print('Number of non-empty columns: ', len(candidate_cols))
 
-            ############################
-            #### DATA_VISUALIZATION ####
-            ############################
+    
 
-            def data_visualization_1():
+            def matrix_to_dataframe(candidate_rows, candidate_cols):
                 """
+                :param candidate_rows:
+                :param candidate_cols:
+                :return df: 
                 """
                 structured_information = []
+
                 for row_index in candidate_rows:
                     auxiliar_vector_content = []
                     auxiliar_vector_data = []
@@ -158,8 +172,30 @@ if __name__ == '__main__':
 
                     structured_information.append(auxiliar_vector_data)
             
-                print(pd.DataFrame(structured_information))
+                return pd.DataFrame(structured_information)
 
-            data_visualization_1()
+            df = matrix_to_dataframe(candidate_rows=both[0],
+                                     candidate_cols=both[1])
+
+
+            
+
+            def dataframe_to_dataframes(df):
+                """
+                :param df: 
+                :return dfs:
+                """
+                dfs = [] # para guardar los dataframes una separado
+
+                for row in df.rows:
+                    for col in df.cols:
+                        pass
+            
+
+            ###############################
+            #### VISUALIZATION_PROCESS ####
+            ###############################
+
+            print(df)
 
         print('\n')
