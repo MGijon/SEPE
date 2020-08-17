@@ -17,7 +17,8 @@ import pandas as pd
 ROUTE_IN = '../Tests/downloaded_files/'
 ROUTE_OUT = 'out_files/'
 NUMBER_OF_DOCUMENTS = 2 # if < 0 -> take all documents
-SHOW_ALL_SHIT = False   # for showing all kind of messages
+SHOW_ALL_SHIT = True   # for showing all kind of messages
+INFO_INSIDE_FUNCTIONS = False
 
 if __name__ == '__main__':
 
@@ -42,8 +43,9 @@ if __name__ == '__main__':
 
         # TODO : eliminar indice
         for i in range(len(sheet_names))[:3]:   
-            
+            print('\n')
             print(' ----> ', sheet_names[i])
+            print('\n')
 
             sheet = document.sheet_by_index(i)
             
@@ -51,8 +53,10 @@ if __name__ == '__main__':
             number_cols = sheet.ncols
 
             if SHOW_ALL_SHIT:
+                print('===============================')
                 print('Original number of rows: ', number_rows)
                 print('Original number of cols: ', number_cols)
+                print('===============================')
 
             information = []
 
@@ -72,7 +76,196 @@ if __name__ == '__main__':
             #### CLEANING_PROCESS ####
             ##########################
             
-            '''
+            
+            candidate_rows = [x for x in range(number_rows)]
+            candidate_cols = [c for c in range(number_cols)]
+
+            def part_1(candidate_rows, candidate_cols):
+                """
+                :param candidate_rows:
+                :param candidate_cols:
+                :return [candidate_rows, candidate_cols]
+                """
+
+                if SHOW_ALL_SHIT and INFO_INSIDE_FUNCTIONS:
+                    print('===============================')
+                    print('--------')
+                    print('Function: part_1')
+                    print('--------')
+                    print(':param candidate_rows:')
+                    print(':param candidate_cols:')
+                    print(':return [candidate_rows, candidate_cols]:')
+                    print('===============================')
+
+                for row_index in candidate_rows:
+                    all_empty = number_cols
+                    for col_index in candidate_cols:
+                        for element in information:
+                            if (element['row']==row_index) and (element['col']==col_index):
+                                # we are in the correct place
+                                if element['content'] == 0:
+                                    all_empty -= 1
+                    if all_empty==0:
+                        index = candidate_rows.index(row_index)
+                        del candidate_rows[index]
+            
+                for col_index in candidate_rows:
+                    all_empty = number_rows
+                    for row_index in candidate_rows:
+                        for element in information:
+                            if (element['row']==row_index) and (element['col']==col_index):
+                                # We are in the correct place
+                                if element['content'] == 0:
+                                    all_empty -= 1
+
+                    if all_empty==0:
+                        index = candidate_cols.index(col_index)
+                        del candidate_cols[index]
+             
+            
+                return [candidate_rows, candidate_cols]
+            
+
+            both = part_1(candidate_rows=candidate_rows, 
+                          candidate_cols=candidate_cols)
+            
+            ###############################################################
+            ###############################################################
+            def looking_for_the_title(cand_rows, cand_cols):
+                """
+                TODO: Descurpcuión pormenorizada de esta cosa
+                :param cand_rows:
+                :param cand_cols:
+                :return:
+                """ 
+
+
+
+                if SHOW_ALL_SHIT and INFO_INSIDE_FUNCTIONS:
+                    print('===============================')
+                    print('--------')
+                    print('Function: looking_for_the_title')
+                    print('--------')
+                    print(':param cand_rows:')
+                    print(':param cand_cols:')
+                    print(':return:')
+                    print('===============================')
+                
+
+                
+
+                '''
+                for row_index in candidate_rows:
+                    all_empty = number_cols
+                    for col_index in candidate_cols:
+                        for element in information:
+                            if (element['row']==row_index) and (element['col']==col_index):
+                                # we are in the correct place
+                                if element['content'] == 0:
+                                    all_empty -= 1
+                    if all_empty==0:
+                        index = candidate_rows.index(row_index)
+                        del candidate_rows[index]
+            
+                for col_index in candidate_rows:
+                    all_empty = number_rows
+                    for row_index in candidate_rows:
+                        for element in information:
+                            if (element['row']==row_index) and (element['col']==col_index):
+                                # We are in the correct place
+                                if element['content'] == 0:
+                                    all_empty -= 1
+
+                    if all_empty==0:
+                        index = candidate_cols.index(col_index)
+                        del candidate_cols[index]
+                '''         
+                return True
+
+            ################################################################
+            ###############################################################
+
+
+            empty_rows = list(
+                set([x for x in range(number_rows)]) - set(both[0])
+            )
+            empty_cols = list(
+                set([x for x in range(number_cols)]) - set(both[1])
+            )
+            if SHOW_ALL_SHIT:
+
+                print('Rows eliminated: ', empty_rows)
+                print('Columns eliminated: ', empty_cols)
+
+                print('Number of non-empty rows: ', len(candidate_rows))
+                print('Number of non-empty columns: ', len(candidate_cols))
+                print('===============================')
+              
+
+    
+
+            def matrix_to_dataframe(cand_rows, cand_cols):
+                """
+                :param cand_rows:
+                :param cand_cols:
+                :return df: 
+                """
+
+                if SHOW_ALL_SHIT and INFO_INSIDE_FUNCTIONS:
+                    print('===============================')
+                    print('--------')
+                    print('Function: matrix_to_dataframe')
+                    print('--------')
+                    print(':param cand_rows:')
+                    print(':param cand_cols:')
+                    print(':return df:')
+                    print('===============================\n')
+
+                structured_information = []
+
+                for row_index in cand_rows:
+                    auxiliar_vector_content = []
+                    auxiliar_vector_data = []
+                    for element in information:
+                        if (element['row']==row_index):
+                            auxiliar_vector_content.append(element['content'])
+                            auxiliar_vector_data.append(element['data'])
+
+
+                    structured_information.append(auxiliar_vector_data)
+            
+                return pd.DataFrame(structured_information)
+
+            df = matrix_to_dataframe(cand_rows=both[0],
+                                     cand_cols=both[1])
+
+
+            
+            # NOT USED NOW!!!!
+            def dataframe_to_dataframes(df):
+                """
+                :param df: 
+                :return dfs:
+                """
+                dfs = [] # para guardar los dataframes una separado
+                
+                #print(df.isna())   # no hay na's... mierda
+
+
+                #df = df.dropna()               
+                return df
+            
+
+            ###############################
+            #### VISUALIZATION_PROCESS ####
+            ###############################
+
+            print(df)
+
+        print('\n')
+
+
+'''
             # (1) Detecting titles: TODO AÑADIR DENTRO DE UNO DE LOS OTROS BUCLES POR COSTO COMPUTACIONAL
             # ===
             sheet_title, sheet_title_row, sheet_title_col = [], [], []
@@ -100,102 +293,4 @@ if __name__ == '__main__':
             
                 print(sheet_title)
                 print('****')
-               ''' 
-            
-            candidate_rows = [x for x in range(number_rows)]
-            candidate_cols = [c for c in range(number_cols)]
-
-            def part_1(candidate_rows, candidate_cols):
-                """
-                :param candidate_rows:
-                :param candidate_cols:
-                """
-                for row_index in candidate_rows:
-                    all_empty = number_cols
-                    for col_index in candidate_cols:
-                        for element in information:
-                            if (element['row']==row_index) and (element['col']==col_index):
-                                # we are in the correct place
-                                if element['content'] == 0:
-                                    all_empty -= 1
-                    if all_empty==0:
-                        index = candidate_rows.index(row_index)
-                        del candidate_rows[index]
-                
-                if SHOW_ALL_SHIT:
-                    print('Total rows after cleaning: ', len(candidate_rows))
-
-                for col_index in candidate_rows:
-                    all_empty = number_rows
-                    for row_index in candidate_rows:
-                        for element in information:
-                            if (element['row']==row_index) and (element['col']==col_index):
-                                # We are in the correct place
-                                if element['content'] == 0:
-                                    all_empty -= 1
-                    if all_empty==0:
-                        index = candidate_cols.index(col_index)
-                        del candidate_cols[index]
-                
-                if SHOW_ALL_SHIT:
-                    print('Total cols after cleaning: ', len(candidate_cols))
-                return [candidate_rows, candidate_rows]
-            
-            both = part_1(candidate_rows=candidate_rows, 
-                          candidate_cols=candidate_cols)
-            
-            if SHOW_ALL_SHIT:
-                print(set(both[1]) - set([x for x in range(number_cols)]))
-                print(set(both[0]) - set([x for x in range(number_rows)]))
-
-                print('Number of non-empty rows: ', len(candidate_rows))
-                print('Number of non-empty columns: ', len(candidate_cols))
-
-    
-
-            def matrix_to_dataframe(candidate_rows, candidate_cols):
-                """
-                :param candidate_rows:
-                :param candidate_cols:
-                :return df: 
-                """
-                structured_information = []
-
-                for row_index in candidate_rows:
-                    auxiliar_vector_content = []
-                    auxiliar_vector_data = []
-                    for element in information:
-                        if (element['row']==row_index):
-                            auxiliar_vector_content.append(element['content'])
-                            auxiliar_vector_data.append(element['data'])
-
-
-                    structured_information.append(auxiliar_vector_data)
-            
-                return pd.DataFrame(structured_information)
-
-            df = matrix_to_dataframe(candidate_rows=both[0],
-                                     candidate_cols=both[1])
-
-
-            
-
-            def dataframe_to_dataframes(df):
-                """
-                :param df: 
-                :return dfs:
-                """
-                dfs = [] # para guardar los dataframes una separado
-
-                for row in df.rows:
-                    for col in df.cols:
-                        pass
-            
-
-            ###############################
-            #### VISUALIZATION_PROCESS ####
-            ###############################
-
-            print(df)
-
-        print('\n')
+''' 
