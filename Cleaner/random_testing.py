@@ -80,7 +80,7 @@ if __name__ == '__main__':
             candidate_rows = [x for x in range(number_rows)]
             candidate_cols = [c for c in range(number_cols)]
 
-            def part_1(candidate_rows, candidate_cols):
+            def eliminate_empty_cols_rows(candidate_rows, candidate_cols):
                 """
                 :param candidate_rows:
                 :param candidate_cols:
@@ -90,7 +90,7 @@ if __name__ == '__main__':
                 if SHOW_ALL_SHIT and INFO_INSIDE_FUNCTIONS:
                     print('===============================')
                     print('--------')
-                    print('Function: part_1')
+                    print('Function: eliminate_empty_cols_rows')
                     print('--------')
                     print(':param candidate_rows:')
                     print(':param candidate_cols:')
@@ -126,8 +126,8 @@ if __name__ == '__main__':
                 return [candidate_rows, candidate_cols]
             
 
-            both = part_1(candidate_rows=candidate_rows, 
-                          candidate_cols=candidate_cols)
+            both = eliminate_empty_cols_rows(candidate_rows=candidate_rows, 
+                                             candidate_cols=candidate_cols)
             
             ###############################################################
             ###############################################################
@@ -240,8 +240,7 @@ if __name__ == '__main__':
                                      cand_cols=both[1])
 
 
-            
-            # NOT USED NOW!!!!
+
             def dataframe_to_dataframes(df):
                 """
                 :param df: 
@@ -249,8 +248,62 @@ if __name__ == '__main__':
                 """
                 dfs = [] # para guardar los dataframes una separado
                 
-                #print(df.isna())   # no hay na's... mierda
 
+                ## CLEANING FIRST ROW AND EXTRACTING TITLE IF THERE IS ONE
+                first_row = df.loc[0, :]
+
+                container = []
+                
+                for element in first_row.values:
+                    if element == '':
+                        pass
+                    elif element == ' ':
+                        pass
+                    else:
+                        container.append(element)
+
+                if len(container) == 0:
+                    df = df.loc[1:, :]
+                elif len(container) == 1:
+                    title = container[0]
+                    df = df.loc[1:, :]
+                else:
+                    df = df # nothing happends
+
+
+                #### HASTA AQÍ ESTÁ FUNCIONAND, A PARTIR DE AQUÍ SOLO EL INFINITO NOS ESPERA
+
+                number_rows_df, number_columns_df = df.shape[0], df.shape[1]
+                print(number_rows_df)
+                print(number_columns_df)
+                
+
+                ## De momeonto lo haré por separado, primero eliminaré columnas vacías y luego filas
+                '''
+                for col in range(1, number_columns_df+1):
+                    contador = 0
+                    for row in range(1, number_columns_df+1):
+                        element = df.loc[1, 1]
+                        if (element == '') or (element== ' '):
+                            contador+=1
+                    print(contador)
+                '''
+                '''
+                for row_index in range(number_rows_df):
+                    counter = 0
+                    for col_index in range(number_columns_df):
+                        element = df.loc[row_index, col_index]
+                        if (element == '') or (element==' '):
+                            counter += 1
+                        if counter==number_columns_df:
+                            # esto significa que la columna está vacía de acuerdo a LA CASUÍSTICA ESTUDIADA
+                            # TODO: LLEVARSE EL TRIGER A UNA FUNCIÓN APARTE
+                            print('Detectada FILA VACÍA')
+                '''
+
+
+                #print(container)
+                #print(type(first_row))
 
                 #df = df.dropna()               
                 return df
@@ -260,7 +313,8 @@ if __name__ == '__main__':
             #### VISUALIZATION_PROCESS ####
             ###############################
 
-            print(df)
+            procesed_df=dataframe_to_dataframes(df=df)
+            print(procesed_df)
 
         print('\n')
 
