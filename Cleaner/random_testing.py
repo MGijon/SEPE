@@ -103,7 +103,8 @@ if __name__ == '__main__':
                         for element in information:
                             if (element['row']==row_index) and (element['col']==col_index):
                                 # we are in the correct place
-                                if element['content'] == 0:
+                                #if element['content'] == 0:
+                                if (element['content'] == 0) or (element['data']=='') or (element['data']==' '):
                                     all_empty -= 1
                     if all_empty==0:
                         index = candidate_rows.index(row_index)
@@ -115,7 +116,8 @@ if __name__ == '__main__':
                         for element in information:
                             if (element['row']==row_index) and (element['col']==col_index):
                                 # We are in the correct place
-                                if element['content'] == 0:
+                                #if element['content'] == 0:
+                                if (element['content'] == 0) or (element['data']=='') or (element['data']==' '):
                                     all_empty -= 1
 
                     if all_empty==0:
@@ -130,6 +132,7 @@ if __name__ == '__main__':
                                              candidate_cols=candidate_cols)
             
             ###############################################################
+            #### SIN USO AHORA MISMO!!!! ##################################
             ###############################################################
             def looking_for_the_title(cand_rows, cand_cols):
                 """
@@ -241,13 +244,17 @@ if __name__ == '__main__':
 
 
 
-            def dataframe_to_dataframes(df):
+            def cleaning_dataframe_rows(df):
                 """
                 :param df: 
                 :return dfs:
                 """
                 dfs = [] # para guardar los dataframes una separado
                 
+
+                #print([x for x in df.index])
+
+
 
                 ## CLEANING FIRST ROW AND EXTRACTING TITLE IF THERE IS ONE
                 first_row = df.loc[0, :]
@@ -268,15 +275,52 @@ if __name__ == '__main__':
                     title = container[0]
                     df = df.loc[1:, :]
                 else:
-                    df = df # nothing happends
+                    df = df 
+
+                print('Títulos: ', container)
+                #######################################################################################################################
+                
+                #print([x for x in df.index])
+                #print(type(df))
+                #print(df.shape)
 
 
-                #### HASTA AQÍ ESTÁ FUNCIONAND, A PARTIR DE AQUÍ SOLO EL INFINITO NOS ESPERA
+                try:
+                    temporal = []
+                    total = 0
+                    #second_row = df.loc[1, :]
+                    for element in df.loc[1, :].values:
+                        if (element=='') or (element==' '):
+                            temporal.append(element)
+                            total+=1
+                    if total==df.shape[1]:
+                        df = df[1:, :]
 
+                except Exception as e:
+                    print(e)
+                    pass
+
+                '''
                 number_rows_df, number_columns_df = df.shape[0], df.shape[1]
                 print(number_rows_df)
                 print(number_columns_df)
                 
+
+                temporal = []
+                indexes = [x for x in df.index]
+                print('Índices: ', indexes)
+
+
+                #print([x for x in df.index])
+
+                #for element in df.iloc[indexes[0]:indexes[2], :]:
+                #    temporal.append(element)
+
+                print(set(temporal))
+                print(df.head())
+                #print(df.loc[df.index[0], :])
+                '''
+                #######################################################################################################################
 
                 ## De momeonto lo haré por separado, primero eliminaré columnas vacías y luego filas
                 '''
@@ -309,12 +353,73 @@ if __name__ == '__main__':
                 return df
             
 
+            def cleaning_dataframe_columns(df):
+                """
+                :param df:
+                :return cleaned_df:
+                """
+                cleaned_df = df
+                number_of_rows = cleaned_df.shape[0]
+                number_of_columns = cleaned_df.shape[1]
+                
+
+                # Case 1: primera columna
+                try:
+                    total=0
+                    for element in cleaned_df.loc[:, 0].values:
+                        if (element == '') or (element == ' '):
+                            total+=1
+                    if total==number_of_rows:
+                        cleaned_df = cleaned_df.loc[:, 1:]
+                except Exception as e:
+                    print('Something has happend during cleaning the first column of the dataframe.')
+                    print(e)
+                    pass 
+
+                # Case 2: última columna 
+                try:
+                    total=0
+                    #print(df.loc[:, number_of_columns-1])
+                    
+                    for element in cleaned_df.loc[:, number_of_columns-1].values:
+                        if (element=='') or (element==' '):
+                            total+=1
+                    if total==number_of_rows:
+                        cleaned_df=cleaned_df.loc[:, :number_of_columns-2]
+                     
+                except Exception as e:
+                    print('Something has happend during cleaning the last column of the dataframe.')
+                    print(e)
+                    pass
+
+                # Case 3: clumnas en medio
+                try:
+                    for i in range(1, number_of_columns-2):
+                        total=0
+                        for element in cleaned_df.loc[:, i].values:
+                            if (element=='') or (element==' '):
+                                total+=1
+                        if total==number_of_rows:
+                            # 
+                            right_part = cleaned_df.loc[:, :i-1]
+                            left_part = cleaned_df.loc[:, i+1:]
+                            cleaned_df = pd.concat([right_part, left_part], axis=1, sort=False)
+                except Exception as e:
+                    print('Something has happend during cleaning the columns in the midle of the dataset.')
+                    print(e)
+                    pass
+
+                return cleaned_df
+
             ###############################
             #### VISUALIZATION_PROCESS ####
             ###############################
 
-            procesed_df=dataframe_to_dataframes(df=df)
-            print(procesed_df)
+            df=cleaning_dataframe_rows(df=df)    # TODO: hacer que se devuelva también el título del documento!!!!
+            df=cleaning_dataframe_columns(df=df)
+
+
+            print(df)
 
         print('\n')
 
