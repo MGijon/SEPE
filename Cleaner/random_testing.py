@@ -131,63 +131,6 @@ if __name__ == '__main__':
             both = eliminate_empty_cols_rows(candidate_rows=candidate_rows, 
                                              candidate_cols=candidate_cols)
             
-            ###############################################################
-            #### SIN USO AHORA MISMO!!!! ##################################
-            ###############################################################
-            def looking_for_the_title(cand_rows, cand_cols):
-                """
-                TODO: Descurpcuión pormenorizada de esta cosa
-                :param cand_rows:
-                :param cand_cols:
-                :return:
-                """ 
-
-
-
-                if SHOW_ALL_SHIT and INFO_INSIDE_FUNCTIONS:
-                    print('===============================')
-                    print('--------')
-                    print('Function: looking_for_the_title')
-                    print('--------')
-                    print(':param cand_rows:')
-                    print(':param cand_cols:')
-                    print(':return:')
-                    print('===============================')
-                
-
-                
-
-                '''
-                for row_index in candidate_rows:
-                    all_empty = number_cols
-                    for col_index in candidate_cols:
-                        for element in information:
-                            if (element['row']==row_index) and (element['col']==col_index):
-                                # we are in the correct place
-                                if element['content'] == 0:
-                                    all_empty -= 1
-                    if all_empty==0:
-                        index = candidate_rows.index(row_index)
-                        del candidate_rows[index]
-            
-                for col_index in candidate_rows:
-                    all_empty = number_rows
-                    for row_index in candidate_rows:
-                        for element in information:
-                            if (element['row']==row_index) and (element['col']==col_index):
-                                # We are in the correct place
-                                if element['content'] == 0:
-                                    all_empty -= 1
-
-                    if all_empty==0:
-                        index = candidate_cols.index(col_index)
-                        del candidate_cols[index]
-                '''         
-                return True
-
-            ################################################################
-            ###############################################################
-
 
             empty_rows = list(
                 set([x for x in range(number_rows)]) - set(both[0])
@@ -243,7 +186,7 @@ if __name__ == '__main__':
                                      cand_cols=both[1])
 
 
-
+            ###############################################################################################################################################
             def cleaning_dataframe_rows(df):
                 """
                 :param df: 
@@ -252,106 +195,74 @@ if __name__ == '__main__':
                 dfs = [] # para guardar los dataframes una separado
                 
 
-                #print([x for x in df.index])
+                cleaned_df = df
+                number_of_rows = cleaned_df.shape[0]
+                number_of_columns = cleaned_df.shape[1]
 
+                footpage_notes = []    # TODO: devolver esto
 
-
-                ## CLEANING FIRST ROW AND EXTRACTING TITLE IF THERE IS ONE
-                first_row = df.loc[0, :]
-
-                container = []
-                
-                for element in first_row.values:
-                    if element == '':
-                        pass
-                    elif element == ' ':
-                        pass
-                    else:
-                        container.append(element)
-
-                if len(container) == 0:
-                    df = df.loc[1:, :]
-                elif len(container) == 1:
-                    title = container[0]
-                    df = df.loc[1:, :]
-                else:
-                    df = df 
-
-                print('Títulos: ', container)
-                #######################################################################################################################
-                
-                #print([x for x in df.index])
-                #print(type(df))
-                #print(df.shape)
-
-
+                # Case 1: primera fila vacía
                 try:
-                    temporal = []
                     total = 0
-                    #second_row = df.loc[1, :]
-                    for element in df.loc[1, :].values:
+                    for element in cleaned_df.loc[0, :].values:
                         if (element=='') or (element==' '):
-                            temporal.append(element)
                             total+=1
-                    if total==df.shape[1]:
-                        df = df[1:, :]
+                    if total==number_cols:
+                        cleaned_df = cleaned_df.loc[1:, :]
+                        number_of_rows = cleaned_df.shape[0]
+                        number_of_columns = cleaned_df.shape[1]
 
                 except Exception as e:
+                    print('Something has happend during cleaning the first row of the document.')
                     print(e)
                     pass
 
+                # Case 2: última fila vacía
+                # TODO: aqí pasa algo que no sé lo que es todavía
                 '''
-                number_rows_df, number_columns_df = df.shape[0], df.shape[1]
-                print(number_rows_df)
-                print(number_columns_df)
+                try:
+                    total = 0
+                    for element in cleaned_df.loc[number_of_rows-1, :].values:
+                        if (element=='') or (element==' '):
+                            total+=1
+                        if (element!='') and (element!=' '):
+                            footpage_notes.append(element)
+
+                    if total==number_of_columns:
+                        cleaned_df = cleaned_df[:(number_of_rows-1), :]
+                  
+                except Exception as e:
+                    print('Something has happend during cleaning the last row of the document.')
+                    print(e)
+                    pass
+                '''
+                # Case 3: filas intermedias vacías
+                try:
+                    for row in range(1, number_of_rows-2):
+                        total = 0
+                        for element in cleaned_df.loc[row, :].values:
+                            if (element=='') or (element==' '):
+                                total+=1
+                        if total==number_of_columns:
+                            upper_df = cleaned_df.loc[:row, :]
+                            lower_df = cleaned_df.loc[row:, :]
+                            dfs.append(upper_df)
+                            dfs.append(lower_df)
+
+                except Exception as e:
+                    print('Something has happend during cleaning the intermediate rows of the document. In this process we saparete between different datasets.')
+                    print(e)
+                    pass
+
                 
-
-                temporal = []
-                indexes = [x for x in df.index]
-                print('Índices: ', indexes)
-
-
-                #print([x for x in df.index])
-
-                #for element in df.iloc[indexes[0]:indexes[2], :]:
-                #    temporal.append(element)
-
-                print(set(temporal))
-                print(df.head())
-                #print(df.loc[df.index[0], :])
-                '''
-                #######################################################################################################################
-
-                ## De momeonto lo haré por separado, primero eliminaré columnas vacías y luego filas
-                '''
-                for col in range(1, number_columns_df+1):
-                    contador = 0
-                    for row in range(1, number_columns_df+1):
-                        element = df.loc[1, 1]
-                        if (element == '') or (element== ' '):
-                            contador+=1
-                    print(contador)
-                '''
-                '''
-                for row_index in range(number_rows_df):
-                    counter = 0
-                    for col_index in range(number_columns_df):
-                        element = df.loc[row_index, col_index]
-                        if (element == '') or (element==' '):
-                            counter += 1
-                        if counter==number_columns_df:
-                            # esto significa que la columna está vacía de acuerdo a LA CASUÍSTICA ESTUDIADA
-                            # TODO: LLEVARSE EL TRIGER A UNA FUNCIÓN APARTE
-                            print('Detectada FILA VACÍA')
-                '''
+                if len(df) > 1:
+                    return dfs 
+                else:
+                    return [cleaned_df]
 
 
-                #print(container)
-                #print(type(first_row))
-
-                #df = df.dropna()               
-                return df
-            
+      
+                ###############################################################################################################################################
 
             def cleaning_dataframe_columns(df):
                 """
@@ -371,6 +282,7 @@ if __name__ == '__main__':
                             total+=1
                     if total==number_of_rows:
                         cleaned_df = cleaned_df.loc[:, 1:]
+
                 except Exception as e:
                     print('Something has happend during cleaning the first column of the dataframe.')
                     print(e)
@@ -378,9 +290,7 @@ if __name__ == '__main__':
 
                 # Case 2: última columna 
                 try:
-                    total=0
-                    #print(df.loc[:, number_of_columns-1])
-                    
+                    total=0                    
                     for element in cleaned_df.loc[:, number_of_columns-1].values:
                         if (element=='') or (element==' '):
                             total+=1
@@ -400,10 +310,10 @@ if __name__ == '__main__':
                             if (element=='') or (element==' '):
                                 total+=1
                         if total==number_of_rows:
-                            # 
                             right_part = cleaned_df.loc[:, :i-1]
                             left_part = cleaned_df.loc[:, i+1:]
                             cleaned_df = pd.concat([right_part, left_part], axis=1, sort=False)
+
                 except Exception as e:
                     print('Something has happend during cleaning the columns in the midle of the dataset.')
                     print(e)
@@ -411,45 +321,62 @@ if __name__ == '__main__':
 
                 return cleaned_df
 
+
             ###############################
             #### VISUALIZATION_PROCESS ####
             ###############################
 
-            df=cleaning_dataframe_rows(df=df)    # TODO: hacer que se devuelva también el título del documento!!!!
-            df=cleaning_dataframe_columns(df=df)
+            dfs=cleaning_dataframe_rows(df=df)    # TODO: hacer que se devuelva también el título del documento!!!!
+            for element in dfs:
+                df=cleaning_dataframe_columns(df=element)
+                print(df)
+                print('\n')
 
 
-            print(df)
-
-        print('\n')
+        
 
 
-'''
-            # (1) Detecting titles: TODO AÑADIR DENTRO DE UNO DE LOS OTROS BUCLES POR COSTO COMPUTACIONAL
-            # ===
-            sheet_title, sheet_title_row, sheet_title_col = [], [], []
+        ## CLEANING FIRST ROW AND EXTRACTING TITLE IF THERE IS ONE
+        '''
+        first_row = df.loc[0, :]
 
-            for row_index in candidate_rows:
-                if number_cols==1:
-                    # in this case the title is all
-                    pass
+                container = []
+        '''
+
+        '''
+                for element in first_row.values:
+                    if element == '':
+                        pass
+                    elif element == ' ':
+                        pass
+                    else:
+                        container.append(element)
+
+                if len(container) == 0:
+                    df = df.loc[1:, :]
+                elif len(container) == 1:
+                    title = container[0]
+                    df = df.loc[1:, :]
                 else:
-                    filled_cells = number_cols 
-                    for col_index in candidate_rows:
-                        for element in information:
-                            if (element['row']==row_index) and (element['col']==col_index):
-                                # We are in the correct place
-                                if element['content'] == 0:
-                                    filled_cells-=1
-                                else:
-                                    sheet_title.append(element['data'])
-                                    sheet_title_row.append(row_index)
-                                    sheet_title_col.append(col_index)
-                    #if filled_cells==1:
-                        # that means this row contains only the title
-                       # index=candidate_cols.index(row_index)
-                        #del candidate_rows[index]
-            
-                print(sheet_title)
-                print('****')
-''' 
+                    df = df 
+
+                print('Títulos: ', container)
+        
+
+                try:
+                    temporal = []
+                    total = 0
+                    for element in df.loc[1, :].values:
+                        if (element=='') or (element==' '):
+                            temporal.append(element)
+                            total+=1
+                    if total==df.shape[1]:
+                        df = df.loc[1:, :]
+
+                except Exception as e:
+                    print(e)
+                    pass
+           
+                return df
+        '''
+
