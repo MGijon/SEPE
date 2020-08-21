@@ -17,7 +17,7 @@ import pandas as pd
 ROUTE_IN = '../Tests/downloaded_files/'
 ROUTE_OUT = 'out_files/'
 NUMBER_OF_DOCUMENTS = 2 # if < 0 -> take all documents
-SHOW_ALL_SHIT = True   # for showing all kind of messages
+SHOW_ALL_SHIT = False   # for showing all kind of messages
 INFO_INSIDE_FUNCTIONS = False
 
 if __name__ == '__main__':
@@ -201,42 +201,7 @@ if __name__ == '__main__':
 
                 footpage_notes = []    # TODO: devolver esto
 
-                # Case 1: primera fila vacía
-                try:
-                    total = 0
-                    for element in cleaned_df.loc[0, :].values:
-                        if (element=='') or (element==' '):
-                            total+=1
-                    if total==number_cols:
-                        cleaned_df = cleaned_df.loc[1:, :]
-                        number_of_rows = cleaned_df.shape[0]
-                        number_of_columns = cleaned_df.shape[1]
-
-                except Exception as e:
-                    print('Something has happend during cleaning the first row of the document.')
-                    print(e)
-                    pass
-
-                # Case 2: última fila vacía
-                # TODO: aqí pasa algo que no sé lo que es todavía
-                '''
-                try:
-                    total = 0
-                    for element in cleaned_df.loc[number_of_rows-1, :].values:
-                        if (element=='') or (element==' '):
-                            total+=1
-                        if (element!='') and (element!=' '):
-                            footpage_notes.append(element)
-
-                    if total==number_of_columns:
-                        cleaned_df = cleaned_df[:(number_of_rows-1), :]
-                  
-                except Exception as e:
-                    print('Something has happend during cleaning the last row of the document.')
-                    print(e)
-                    pass
-                '''
-                # Case 3: filas intermedias vacías
+                # DIFFERENT GROUPS OF DATA
                 try:
                     for row in range(1, number_of_rows-2):
                         total = 0
@@ -246,19 +211,110 @@ if __name__ == '__main__':
                         if total==number_of_columns:
                             upper_df = cleaned_df.loc[:row, :]
                             lower_df = cleaned_df.loc[row:, :]
-                            dfs.append(upper_df)
-                            dfs.append(lower_df)
+                            dfs.append({
+                                'title': [],
+                                'subtitle': [],
+                                'footnotes': [],
+                                'dataframe': upper_df,
+                                })
+                            dfs.append({
+                                'title': [],
+                                'subtitle': [],
+                                'footnotes': [],
+                                'dataframe': lower_df,
+                                })
 
                 except Exception as e:
                     print('Something has happend during cleaning the intermediate rows of the document. In this process we saparete between different datasets.')
                     print(e)
                     pass
 
+
+                # TODO: REFACTORIZAR ESTA MIERDA ENORME!!!!
+                # First row empty? -> Extraction of the title/titles and subtitles
+                try:
+                    # first empty row
+                    for element in dfs:
+                        
+                        total_rows, total_columns = element['dataframe'].shape[0], element['dataframe'].shape[1]
+                        first_row = element['dataframe'].iloc[0]
+
+                        total = 0 
+                        for single_element in first_row.values:
+                            if (single_element=='') or (single_element==' '):
+                                total+=1
+                        if total==number_cols:
+                            element['dataframe'] = element['dataframe'].iloc[1:]
+                        
+                    # TITLE and SUBTITLE
+                    for element in dfs:
+                        total_rows, total_columns = element['dataframe'].shape[0], element['dataframe'].shape[1]
+                        
+                        # Used to contain the title
+                        first_row = element['dataframe'].iloc[0]
+                        # Used to coantain the subtitle
+                        #second_row = element['dataframe'].iloc[1]
+
+                        total_title=0 
+                        total_subtitle=0
+
+                        for single_element in first_row.values:
+                            if (single_element=='') or (single_element==' '):
+                                total_title+=1
+                            else:
+                                element['title'].append(single_element)
+                        '''
+                        for single_element in second_row.values:
+                            if (single_element=='') or (single_element==' '):
+                                total_subtitle+=1
+                            else:
+                                element['subtitle'].append(single_element)
+
+
+                        if (total_title==(number_cols-1)) and (total_subtitle==(number_cols-1)):
+                            element['dataframe'] = element['dataframe'].iloc[2:]
+                        '''
+                        if (total_title==(number_cols-1)):
+                            element['dataframe'] = element['dataframe'].iloc[2:]
+
+
+
+                except Exception as e:
+                    print('Something has happend during cleaning the first row of the document.')
+                    print(e)
+                    pass
+
+                '''
                 
+                # Last row? -> Extraction of the footnotes
+                for element in dfs:
+                    total_rows, total_columns = element['dataframe'].shape[0], element['dataframe'].shape[1]    
+                    last_row = element['dataframe'].iloc[total_columns]
+
+                    total_footnotes = 0
+                    
+                    if total_rows > 2:
+                        for single_element in last_row.values:
+                            if (single_element=='') or (single_element==' '):
+                                total_footnotes+=1
+                            else:
+                                element['footnotes'].append(single_element)
+                        if (total_footnotes==(total_columns-1)):
+                            element['dataframe'] = element['dataframe'].iloc[:total_columns]
+                '''
+    
+                ## TODO: agrupar columnas si la de abajo también tiene texto
+
+                # TODO: comprobar si solamente basta con devolver la lista
                 if len(df) > 1:
                     return dfs 
                 else:
-                    return [cleaned_df]
+                    return [{
+                        'title': [],
+                        'subtitle': [],
+                        'footnotes': [],
+                        'dataframe': cleaned_df,
+                        }]
 
 
       
@@ -326,10 +382,14 @@ if __name__ == '__main__':
             #### VISUALIZATION_PROCESS ####
             ###############################
 
-            dfs=cleaning_dataframe_rows(df=df)    # TODO: hacer que se devuelva también el título del documento!!!!
+            dfs=cleaning_dataframe_rows(df=df)    
+
             for element in dfs:
-                df=cleaning_dataframe_columns(df=element)
+                print('Title: ', element['title'])
+                print('Subtitle: ', element['subtitle'])
+                df=cleaning_dataframe_columns(df=element['dataframe'])
                 print(df)
+                print('Footnotes: ', element['footnotes'])
                 print('\n')
 
 
