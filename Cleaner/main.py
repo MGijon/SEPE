@@ -30,23 +30,6 @@ if __name__ == '__main__':
     print('# ============== #')
     print('# PROCESS PART 1 #')
     print('# ============== #')
-
-    '''
-    # NO PROGRESSBAR version
-    for excel_file in sample:
-        try:
-            excel_name = excel_file.replace('ROUTE_IN', '')
-            excel_name = excel_name.replace('.csv', '').replace('.xls', '').replace('.xlsx', '')
-
-            # wont add another try/except becouse until this point there is no reason to fail
-            main_cleaner(file=excel_file, 
-                         name=excel_name)
-
-        except Exception as e:
-            print(e)
-            pass 
-
-    '''
     try: 
         with progressbar.ProgressBar(max_value=len(sample)) as bar:
 
