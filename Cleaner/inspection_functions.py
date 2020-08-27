@@ -1,5 +1,5 @@
 """
-CONTENT: Functions that clean the files.
+CONTENT: Functions that show the distribution of the data types in each sheet.
 ========
 NOTES:
 ======
@@ -70,31 +70,9 @@ def looking_for_groups(sheet, sheet_name, excel_file_name, plot_heatmap=False, s
 
     return posible_information
 
-def erasing_empty_columns_rows(sheet, sheet_name, excel_file_name):
-    """
-    TODO: description.
-    :param sheet: excell sheet.
-    :param sheet_name: name of the sheet.
-    :param excel_file_name: name of the excel file.
-    :return: None.
-
-    NOTES:
-    ======
-        - cell_type(row, col) == 0 ==>> the cell is empty.
-        - cell_type(row, col) == 1 ==>> the cell contains text.
-        - cell_type(row, col) == 2 ==>> the cell contains a number.
-        - cell_type(row, col) == 3 ==>> the cell contains a date (does not considered now).
-        - cell_type(row, col) == 4 ==>> the cell contains a boolean (does not considered now).
-
-    """
 
 
-
-
-    return 0
-
-
-def main_cleaner(file, name, heatmaps=False):
+def main_inspector(file, name, heatmaps=False):
     """
     :param file: excel file (route).
     :param name: excel file name.
@@ -115,11 +93,9 @@ def main_cleaner(file, name, heatmaps=False):
 
         # iterate over the sheets
         for i in range(len(sheet_names)):
-            #
+            
             current_sheet = document.sheet_by_index(i)
-            #
             sheet_name = sheet_names[i]
-            #
             looking_for_groups(sheet=current_sheet, 
                                sheet_name=sheet_name, 
                                excel_file_name = name,
@@ -139,20 +115,3 @@ def main_cleaner(file, name, heatmaps=False):
 
         for line in information:
             print(line)
-   # Ahora aquí debo de hacer las llamadas oportunas
-
-
-"""
-BAD_CODE:
-=========
-
-
-"""
-
-
-"""
-REFERENCES:
-===========
-
-
-"""
